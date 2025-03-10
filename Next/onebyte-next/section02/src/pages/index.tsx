@@ -3,23 +3,19 @@ import style from "./index.module.css";
 import { ReactNode, useEffect } from "react";
 import books from "@/mock/books.json";
 import BookItem from "@/components/book-item";
-import { InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType, InferGetStaticPropsType } from "next";
 import fetchBooks from "@/lib/fetch-books";
 import fetchRandomBooks from "@/lib/fetch-random-books";
 
-// 이렇게 해주면 이 페이지는 ssr 방식으로 사전 렌더링이 이루어지게 된다.
-export const getServerSideProps = async () => {
-  // const allBooks = await fetchBooks();
-  // const recoBooks = await fetchRancomBooks();
-  // 현재는 하나 받아오고 기다리고 하나 받아옴, 아래는 동시에 병렬로 받아오는 방법
+// getStaticProps : SSG 방식으로 동작함
+// ssr과 동일하게 내부 구조가 같다
+export const getStaticProps = async () => {
+  console.log("인덱스 페이지");
   const [allBooks, recoBooks] = await Promise.all([
     fetchBooks(),
     fetchRandomBooks(),
   ]);
 
-  // 컴포넌트보다 먼저 실행이 되어서, 컴포넌트에 필요한 데이터 불러오는 함수
-
-  // 이 함수는 객체를 반환해야하는데, 이 떄 props라는 속성 포함하는 단 하나의 객체 반환해야 함
   return {
     props: {
       allBooks,
@@ -27,18 +23,12 @@ export const getServerSideProps = async () => {
     },
   };
 };
-// InferGetServerSidePropsType : getServerSideProps 가 반환하는 객체값을 자동으로 추론해주는 타입
+// InferGetServerSidePropsType ->  InferGetStaticPropsType
+// getServerSideProps -> getStaticProps
 export default function Home({
   allBooks,
   recoBooks,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  // 해당 컴포넌트는 서버에서 한번 실행하고 브라우저에서 한 번 더 실행됨
-  // 그래서 브라우저에서만 돌아가는 window.location 을 아무조건 없이 작성하면 오류 발생함
-  // 그럼 브라우저에서만 실행하게 하려면?
-
-  // 1. useEffect 사용하기
-
-  console.log(allBooks);
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <div className={style.container}>
       <section>
