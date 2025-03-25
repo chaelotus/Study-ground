@@ -23,7 +23,7 @@ export const getStaticProps = async () => {
     },
     // revalidate의 속성값으로는 몇초 주기로 페이지를 다시 생성할건지(=페이지의 유통기한)를 초 단위로 적어주기
     // * revalidate : 재검증하다.
-    revalidate: 3,
+    //revalidate: 3,
   };
 };
 // InferGetServerSidePropsType ->  InferGetStaticPropsType
