@@ -1,17 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+// app router 버전의 useRouter는 next/navigation에서 불러와야 함.
 
 export default function Searchbar() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
 
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
+
+  const onSubmit = () => {
+    router.push(`/search?q=${search}`);
+  };
   return (
     <div>
       <input value={search} onChange={onChangeSearch} type="text" />
-      <button>검색</button>
+      <button onClick={onSubmit}>검색</button>
     </div>
   );
 }
